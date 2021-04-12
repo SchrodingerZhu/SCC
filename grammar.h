@@ -2,7 +2,9 @@
 #define GRAMMAR_H
 
 #include <frontend.h>
-
+#include <iostream>
+#include <memory>
+#include <cxxabi.h>
 namespace scc {
     using namespace parser;
     struct expression;
@@ -163,6 +165,28 @@ namespace scc {
             binary_mod, binary_div, binary_mul, fcall, unary_not, unary_bneg, unary_neg, unary_pos, access, identifier, integer, return_statement, dowhile_statement, while_statement, ifelse_statement,
             code_block, array_assign, var_assign, var_decl, array_decl, extern_decl, function, program>;
 
+    int visualize_inner(std::ostream& out, const ParseTree& tree, int id = 0) {
+        static char buffer[512];
+        int status;
+        size_t length = 512;
+        abi::__cxa_demangle(tree.instance.name(), buffer, &length, &status);
+        if (tree.instance == typeid (identifier) || tree.instance == typeid (integer)) {
+            out << "\t" << id << " [ label= \"" << tree.parsed_region << "\"]; " << std::endl;
+        } else {
+            out << "\t" << id << " [ label= \"" << buffer << "\"]; " << std::endl;
+        }
+        int sub_id = id + 1;
+        for (const auto & i : tree.subtrees) {
+            out << "\t" << id << " -> " << sub_id << "; " << std::endl;
+            sub_id = visualize_inner(out, *i, sub_id) + 1;
+        }
+        return sub_id;
+    }
+    void visualize(std::ostream& out, const ParseTree& tree) {
+        out << "digraph AST {" << std::endl;
+        visualize_inner(out, tree);
+        out << "}" << std::endl;
+    }
 }
 
 
