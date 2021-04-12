@@ -8,6 +8,9 @@ namespace scc {
     struct expression;
     struct statement;
     struct toplevel;
+    struct fcall;
+    struct access;
+    struct paren_expr;
     struct KEYWORD;
 
     RULE(DIGIT, CharRange<'0', '9'>
@@ -22,20 +25,21 @@ namespace scc {
     RULE(integer, Plus<DIGIT>
     )
 
-    RULE(access, SpaceInterleaved<identifier, Char < '['>, expression, Char<']'>>
+    RULE(unary_term, Ord<fcall, access, identifier, integer, paren_expr>)
+    RULE(access, SpaceInterleaved<identifier, Char < '['>, unary_term, Char<']'>>
     )
-    RULE(unary_pos, SpaceInterleaved<Char < '+'>, expression
+    RULE(unary_pos, SpaceInterleaved<Char < '+'>, unary_term
     >)
-    RULE(unary_neg, SpaceInterleaved<Char < '-'>, expression
+    RULE(unary_neg, SpaceInterleaved<Char < '-'>, unary_term
     >)
-    RULE(unary_bneg, SpaceInterleaved<Char < '~'>, expression
+    RULE(unary_bneg, SpaceInterleaved<Char < '~'>, unary_term
     >)
-    RULE(unary_not, SpaceInterleaved<Char < '!'>, expression
+    RULE(unary_not, SpaceInterleaved<Char < '!'>, unary_term
     >)
     RULE(unary, Ord<unary_pos, unary_neg, unary_bneg, unary_not>
     )
 
-    RULE(paren_expr, Seq<Char < '('>, expression, Char<')'>>
+    RULE(paren_expr, SpaceInterleaved<Char < '('>, expression, Char<')'>>
     )
     RULE(expr_list, SpaceInterleaved<Char < '('>, Optional<
             SpaceInterleaved < expression, Asterisk < SpaceInterleaved < Char < ','>, expression

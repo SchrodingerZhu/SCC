@@ -15,4 +15,3 @@ int main(int, char** argv) {
         a->display(std::cout);
     }
 }
-
