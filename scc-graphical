@@ -10,5 +10,4 @@ docker cp "$1" "$INSTANCE:/tmp/input"
 docker exec -i "$INSTANCE" /project/scc -g /tmp/input -o /tmp/data.dot
 docker exec -i "$INSTANCE" dot -Tpng /tmp/data.dot -o /tmp/data.png
 docker cp "$INSTANCE:/tmp/data.png" "$2"
-docker cp "$INSTANCE:/tmp/data.dot" "$2.dot"
 docker kill "$INSTANCE" >/dev/null
