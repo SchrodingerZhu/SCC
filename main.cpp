@@ -42,6 +42,7 @@ Opt parse_option(int argc, const char **argv) {
                 opt.fout = std::ofstream{argv[i]};
             }
             expect_out = true;
+            continue;
         }
         if (argv[i][0] == '-') {
             if CMDCMP(h, help) {

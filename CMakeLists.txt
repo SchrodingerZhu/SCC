@@ -11,5 +11,5 @@ cmake_policy(POP)
 
 include_directories(frontend/include backend/include backend/parallel-hashmap/parallel_hashmap)
 
-add_executable(scc main.cpp codegen.cpp)
+add_executable(scc main.cpp)
 target_link_libraries(scc parser vcfg)

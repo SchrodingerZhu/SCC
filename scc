@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -e
+
+if ! (docker images | grep -q csc4180-118010469-3)
+then
+  docker build . -t csc4180-118010469-3
+fi
+
+
+if [[ $# -eq 2 ]]
+then
+  docker run -i csc4180-118010469-3 /project/scc < "$1" > "$2"
+elif [[ $# -eq 1 ]]; then
+  docker run -i csc4180-118010469-3 /project/scc < "$1"
+else
+  echo "wrong number of arguments."
+  exit 1
+fi
