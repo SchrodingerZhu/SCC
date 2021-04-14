@@ -32,6 +32,7 @@ static inline void error_exit() {
 #define CMDCMP(SHORT, LONG) \
     (strcmp(argv[i], "-" #SHORT ) == 0 || strcmp(argv[i], "--" #LONG) == 0)
 
+// parse command line and exit on error.
 Opt parse_option(int argc, const char **argv) {
     Opt opt;
     bool expect_out = false;
@@ -63,7 +64,7 @@ Opt parse_option(int argc, const char **argv) {
     }
     return opt;
 }
-
+// build the ast, compress it and output to required format.
 int main(int argc, const char **argv) {
     Opt opt = parse_option(argc, argv);
     std::istream* input = &std::cin;
