@@ -90,7 +90,6 @@ namespace scc {
 
     DEFINE_KEYWORD(INT, 'i', 'n', 't')
     DEFINE_KEYWORD(VOID, 'v', 'o', 'i', 'd')
-    DEFINE_KEYWORD(EXTERN, 'e', 'x', 't', 'e', 'r', 'n')
     DEFINE_KEYWORD(DO, 'd', 'o')
     DEFINE_KEYWORD(ELSE, 'e', 'l', 's', 'e')
     DEFINE_KEYWORD(IF, 'i', 'f')
@@ -98,13 +97,12 @@ namespace scc {
     DEFINE_KEYWORD(RETURN, 'r', 'e', 't', 'u', 'r', 'n')
 
 
-    RULE(KEYWORD, Ord<INT, VOID, EXTERN, DO, ELSE, IF, WHILE, RETURN>);
+    RULE(KEYWORD, Ord<INT, VOID, DO, ELSE, IF, WHILE, RETURN>);
     RULE(var_decl, SpaceInterleaved<INT, identifier>)
     RULE(array_decl, SpaceInterleaved<INT, identifier, Char<'['>, integer, Char<']'>>)
     RULE(var_list, SpaceInterleaved<Char<'('>, Optional<
             SpaceInterleaved<var_decl, Asterisk<SpaceInterleaved<Char<','>, var_decl
             >>>>, Char<')'>>)
-    RULE(extern_decl, SpaceInterleaved<EXTERN, Ord<INT, VOID>, identifier, var_list>)
     RULE(var_assign, SpaceInterleaved<identifier, Char<'='>, expression>)
     RULE(array_assign, SpaceInterleaved<access, Char<'='>, expression>)
 
@@ -115,21 +113,21 @@ namespace scc {
     RULE(ifelse_statement, SpaceInterleaved<if_stmt, Optional<else_stmt>>)
     RULE(while_statement, SpaceInterleaved<WHILE, paren_expr, statement>)
     RULE(dowhile_statement, SpaceInterleaved<DO, statement, WHILE, paren_expr>)
-    RULE(return_statement, SpaceInterleaved<RETURN, Optional<expression>>)
+    RULE(return_statement, RETURN)
 
     RULE(statement, Ord<SpaceInterleaved<Ord<
-            array_assign, var_assign, array_decl, var_decl, expression, return_statement, dowhile_statement, Nothing >,
-         Char<';'>>, code_block, ifelse_statement, while_statement >)
+            array_assign, var_assign, array_decl, var_decl, expression, return_statement, dowhile_statement, Nothing>,
+            Char<';'>>, code_block, ifelse_statement, while_statement >)
 
-    RULE(function, SpaceInterleaved<Ord<INT, VOID>, identifier, var_list, code_block>)
-    RULE(toplevel, Ord<function, Char<';'>, SpaceInterleaved<Ord<extern_decl, var_decl>, Char<';'>>>)
-    RULE(program, Seq<Start, Plus<SpaceInterleaved<toplevel>>, End>)
+    //RULE(function, SpaceInterleaved<Ord<INT, VOID>, identifier, var_list, code_block>)
+    //RULE(toplevel, Ord<function, Char<';'>, SpaceInterleaved<Ord<extern_decl, var_decl>, Char<';'>>>)
+    RULE(program, Seq<Start, Separator, Plus<SpaceInterleaved<statement>>, Separator, End>)
 
     // selection filter to rule out intermediate structures
-    using SelectRule = Selector<binary_lor,
+    using SelectRule = Selector<binary_lor, if_stmt, else_stmt,
             binary_land, binary_bor, binary_bxor, binary_band, binary_ne, binary_eq, binary_ge, binary_gt, binary_le, binary_lt, binary_shr, binary_shl, binary_sub, binary_add,
             binary_mod, binary_div, binary_mul, fcall, unary_not, unary_bneg, unary_neg, unary_pos, access, identifier, integer, return_statement, dowhile_statement, while_statement, ifelse_statement,
-            code_block, array_assign, var_assign, var_decl, array_decl, extern_decl, function, program, var_list>;
+            code_block, array_assign, var_assign, var_decl, array_decl, program, var_list>;
 
     // auxiliary function to output the dot graph for visualization
     static inline int visualize_inner(std::ostream &out, const ParseTree &tree, int id = 0) {
@@ -155,6 +153,20 @@ namespace scc {
         out << "digraph AST {" << std::endl;
         visualize_inner(out, tree);
         out << "}" << std::endl;
+    }
+
+    template<class T>
+    static inline auto match_rule(std::string_view input) {
+        TreePtr result = T{}.match({
+                                 std::make_shared<parser::MemoTable>(),
+                                 input,
+                                 0,
+                                 0
+                         });
+        if (result) {
+            result = result->template compress<SelectRule>()[0];
+        }
+        return result;
     }
 }
 

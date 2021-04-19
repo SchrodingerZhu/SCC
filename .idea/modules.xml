@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/simplified-c.iml" filepath="$PROJECT_DIR$/.idea/simplified-c.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/4180-parser.iml" filepath="$PROJECT_DIR$/.idea/4180-parser.iml" />
     </modules>
   </component>
 </project>
