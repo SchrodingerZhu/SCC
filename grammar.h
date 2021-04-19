@@ -129,10 +129,10 @@ namespace scc {
     using SelectRule = Selector<binary_lor,
             binary_land, binary_bor, binary_bxor, binary_band, binary_ne, binary_eq, binary_ge, binary_gt, binary_le, binary_lt, binary_shr, binary_shl, binary_sub, binary_add,
             binary_mod, binary_div, binary_mul, fcall, unary_not, unary_bneg, unary_neg, unary_pos, access, identifier, integer, return_statement, dowhile_statement, while_statement, ifelse_statement,
-            code_block, array_assign, var_assign, var_decl, array_decl, extern_decl, function, program>;
+            code_block, array_assign, var_assign, var_decl, array_decl, extern_decl, function, program, var_list>;
 
     // auxiliary function to output the dot graph for visualization
-    int visualize_inner(std::ostream &out, const ParseTree &tree, int id = 0) {
+    static inline int visualize_inner(std::ostream &out, const ParseTree &tree, int id = 0) {
         static char buffer[512];
         int status;
         size_t length = 512;
@@ -151,7 +151,7 @@ namespace scc {
     }
 
     // output the dot graph file to target stream
-    void visualize(std::ostream &out, const ParseTree &tree) {
+    static inline void visualize(std::ostream &out, const ParseTree &tree) {
         out << "digraph AST {" << std::endl;
         visualize_inner(out, tree);
         out << "}" << std::endl;
