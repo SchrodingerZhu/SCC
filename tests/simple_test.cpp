@@ -15,7 +15,7 @@ void test_function() {
             " i = 1; "
             " do {\n"
             "   i = i; exit(0);"
-            " } while (i); "
+            " } while (!i); "
             "}";
    auto i = scc::match_rule<scc::program>(data);
    i->display(std::cout);

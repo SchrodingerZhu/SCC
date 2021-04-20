@@ -56,7 +56,20 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         return function_generate(factory, func, *tree.subtrees[0], table, node);
     })
     CODEGEN(unary_not, {
-        // TODO
+        auto tmp = func.append<li>(1);
+        auto term = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto value = func.append<li>(0);
+        auto ret = func.append<movz>(tmp, term);
+        func.add_phi(value, ret);
+        return ret;
+    })
+    CODEGEN(unary_neg, {
+        auto term = function_generate(factory, func, *tree.subtrees[0], table, node);
+        return func.append<negu>(term);
+    })
+    CODEGEN(unary_bneg, {
+        auto term = function_generate(factory, func, *tree.subtrees[0], table, node);
+        return func.append<bnot>(term);
     })
     CODEGEN(while_statement, {
         auto cond = function_generate(factory, func, *tree.subtrees[0], table, node);
@@ -80,11 +93,11 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         return func.call(function, std::move(args));
     })
     CODEGEN(dowhile_statement, {
-        auto cond = function_generate(factory, func, *tree.subtrees[1], table, node);
         auto body = func.new_section();
         NodePtr _tmp = body;
         function_generate(factory, func, *tree.subtrees[0], table, _tmp);
         NodePtr now = func.cursor;
+        auto cond = function_generate(factory, func, *tree.subtrees[1], table, now);
         func.branch_existing<bnez>(body, cond);
         func.switch_to(now);
         func.new_section();
