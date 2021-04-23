@@ -46,6 +46,128 @@ int constant(const parser::ParseTree &tree) {
 std::shared_ptr<VirtReg>
 codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const parser::ParseTree &tree,
                            SccSymTable &table, NodePtr &node) {
+    CODEGEN(binary_mul, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        return func.append<mul>(a, b);
+    })
+    CODEGEN(binary_land, {
+        auto left = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto sections = func.branch<beqz>(left);
+
+        auto right = function_generate(factory, func, *tree.subtrees[1], table, node);
+        auto right_result = func.append<sltu>(get_special(SpecialReg::zero), right);
+
+        func.switch_to(sections.second);
+        auto left_result = func.append<move>(get_special(SpecialReg::zero));
+
+        func.join(sections.first, sections.second);
+        func.add_phi(left_result, right_result);
+
+        return left_result;
+    })
+    CODEGEN(binary_lor, {
+        auto left = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto sections = func.branch<bnez>(left);
+
+        auto right = function_generate(factory, func, *tree.subtrees[1], table, node);
+        auto right_result = func.append<sltu>(get_special(SpecialReg::zero), right);
+
+        func.switch_to(sections.second);
+        auto left_result = func.append<li>(1);
+
+        func.join(sections.first, sections.second);
+        func.add_phi(left_result, right_result);
+
+        return left_result;
+    })
+    CODEGEN(binary_band, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        return func.append<vmips::band>(a, b);
+    })
+    CODEGEN(binary_bor, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        return func.append<vmips::bor>(a, b);
+    })
+    CODEGEN(binary_bxor, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        return func.append<vmips::bxor>(a, b);
+    })
+    CODEGEN(binary_div, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        func.append_void<vmips::div>(a, b);
+        return func.append<mflo>();
+    })
+    CODEGEN(binary_mod, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        func.append_void<vmips::div>(a, b);
+        return func.append<mfhi>();
+    })
+    CODEGEN(binary_add, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        return func.append<vmips::add>(a, b);
+    })
+    CODEGEN(binary_sub, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        return func.append<vmips::sub>(a, b);
+    })
+    CODEGEN(binary_shl, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        return func.append<vmips::sllv>(a, b);
+    })
+    CODEGEN(binary_shr, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        return func.append<vmips::srlv>(a, b);
+    })
+    CODEGEN(binary_lt, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        auto ret = func.append<vmips::slt>(a, b);
+        return ret;
+    })
+    CODEGEN(binary_eq, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        auto c = func.append<vmips::bxor>(a, b);
+        auto ret = func.append<sltiu>(c, 1);
+        return ret;
+    })
+    CODEGEN(binary_gt, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        auto ret = func.append<vmips::slt>(b, a);
+        return ret;
+    })
+    CODEGEN(binary_ne, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        auto c = func.append<vmips::bxor>(a, b);
+        auto ret = func.append<sltu>(get_special(SpecialReg::zero), c);
+        return ret;
+    })
+    CODEGEN(binary_le, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        auto c = func.append<vmips::slt>(b, a);
+        auto ret = func.append<xori>(c, 1);
+        return ret;
+    })
+    CODEGEN(binary_ge, {
+        auto a = function_generate(factory, func, *tree.subtrees[0], table, node);
+        auto b = function_generate(factory, func, *tree.subtrees[1], table, node);
+        auto c = func.append<vmips::slt>(a, b);
+        auto ret = func.append<xori>(c, 1);
+        return ret;
+    })
     CODEGEN(integer, {
         return func.append<li>(constant(tree));
     })
@@ -56,11 +178,8 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         return function_generate(factory, func, *tree.subtrees[0], table, node);
     })
     CODEGEN(unary_not, {
-        auto tmp = func.append<li>(1);
         auto term = function_generate(factory, func, *tree.subtrees[0], table, node);
-        auto value = func.append<li>(0);
-        auto ret = func.append<movz>(tmp, term);
-        func.add_phi(value, ret);
+        auto ret = func.append<sltiu>(term, 1);
         return ret;
     })
     CODEGEN(unary_neg, {
@@ -78,6 +197,7 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         auto outside = func.new_section();
         func.switch_to(body);
         func.branch_existing<beqz>(outside, cond);
+        func.switch_to(body);
         function_generate(factory, func, *tree.subtrees[1], table, _tmp);
         func.branch_existing<j>(body);
         func.switch_to(outside);

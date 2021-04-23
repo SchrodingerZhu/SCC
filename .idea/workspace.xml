@@ -20,12 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6fd5f38f-c433-42a6-8b4a-8214b56be077" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/parallel-hashmap" beforeDir="false" afterPath="$PROJECT_DIR$/backend/parallel-hashmap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/parallel-hashmap/phmap_lldb.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/parallel-hashmap/phmap_lldb.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/graph.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/graph.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codegen.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/codegen.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/simple_test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/simple_test.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +36,9 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="1yf1x3pl" />
   </component>
   <component name="ProjectId" id="1rBgNWFSSb6eNQQ454RqGj9ntPQ" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -60,9 +61,9 @@
     <property name="settings.editor.selected.configurable" value="CPPToolchains" />
   </component>
   <component name="RunManager" selected="CMake Application.simple_test">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
       </method>
     </configuration>
     <configuration name="color_test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="simplified_c" TARGET_NAME="color_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="simplified_c" RUN_TARGET_NAME="color_test">

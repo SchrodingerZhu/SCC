@@ -10,13 +10,15 @@ void test_trim() {
 
 void test_function() {
     const static char data[] =
-            "while (1) {"
-            " int i; \n"
-            " i = 1; "
-            " do {\n"
-            "   i = i; exit(0);"
-            " } while (!i); "
-            "}";
+            "int i;"
+            "int sum;"
+            "i = 1;"
+            "sum = 0;"
+            "while (i < 100 || i == 100) {"
+            " sum = sum + i;"
+            " i = i + 1;"
+            "}"
+            "print(sum);";
    auto i = scc::match_rule<scc::program>(data);
    i->display(std::cout);
    codegen::codegen(*i);
