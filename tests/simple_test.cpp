@@ -14,9 +14,12 @@ void test_function() {
             "int sum;"
             "i = 1;"
             "sum = 0;"
-            "while (i < 100 || i == 100) {"
+            "while (i < 100) {"
             " sum = sum + i;"
             " i = i + 1;"
+            " if (i > 5) {"
+            "   return; "
+            " }"
             "}"
             "print(sum);";
    auto i = scc::match_rule<scc::program>(data);

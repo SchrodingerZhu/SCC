@@ -55,13 +55,13 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         auto left = function_generate(factory, func, *tree.subtrees[0], table, node);
         auto sections = func.branch<beqz>(left);
 
-        auto right = function_generate(factory, func, *tree.subtrees[1], table, node);
+        auto right = function_generate(factory, func, *tree.subtrees[1], table, sections.first);
         auto right_result = func.append<sltu>(get_special(SpecialReg::zero), right);
 
         func.switch_to(sections.second);
         auto left_result = func.append<move>(get_special(SpecialReg::zero));
 
-        func.join(sections.first, sections.second);
+        node = func.join(sections.first, sections.second);
         func.add_phi(left_result, right_result);
 
         return left_result;
@@ -70,13 +70,13 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         auto left = function_generate(factory, func, *tree.subtrees[0], table, node);
         auto sections = func.branch<bnez>(left);
 
-        auto right = function_generate(factory, func, *tree.subtrees[1], table, node);
+        auto right = function_generate(factory, func, *tree.subtrees[1], table, sections.first);
         auto right_result = func.append<sltu>(get_special(SpecialReg::zero), right);
 
         func.switch_to(sections.second);
         auto left_result = func.append<li>(1);
 
-        func.join(sections.first, sections.second);
+        node = func.join(sections.first, sections.second);
         func.add_phi(left_result, right_result);
 
         return left_result;
@@ -191,15 +191,15 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         return func.append<bnot>(term);
     })
     CODEGEN(while_statement, {
-        auto cond = function_generate(factory, func, *tree.subtrees[0], table, node);
         auto body = func.new_section();
-        NodePtr _tmp = body;
+        auto start = body;
+        auto cond = function_generate(factory, func, *tree.subtrees[0], table, body);
         auto outside = func.new_section();
         func.switch_to(body);
         func.branch_existing<beqz>(outside, cond);
         func.switch_to(body);
-        function_generate(factory, func, *tree.subtrees[1], table, _tmp);
-        func.branch_existing<j>(body);
+        function_generate(factory, func, *tree.subtrees[1], table, body);
+        func.branch_existing<j>(start);
         func.switch_to(outside);
         node = outside;
     })
