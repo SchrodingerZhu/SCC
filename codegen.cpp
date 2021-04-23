@@ -342,6 +342,7 @@ void codegen::codegen(const ParseTree &root) {
             .cache = {}
     };
     auto func = module.create_function("main", 3);
+    func->assign_special(SpecialReg::v0, 0);
     table.enter();
     auto bottom = func->cursor;
     for (const auto &statement : root.subtrees) {

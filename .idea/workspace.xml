@@ -21,9 +21,9 @@
   <component name="ChangeListManager">
     <list default="true" id="6fd5f38f-c433-42a6-8b4a-8214b56be077" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend" beforeDir="false" afterPath="$PROJECT_DIR$/backend" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/parallel-hashmap" beforeDir="false" afterPath="$PROJECT_DIR$/backend/parallel-hashmap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/codegen.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/codegen.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/simple_test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/simple_test.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
