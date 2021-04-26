@@ -201,7 +201,7 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         function_generate(factory, func, *tree.subtrees[1], table, body);
         func.branch_existing<j>(start);
         func.switch_to(outside);
-        node = outside;
+        node = func.new_section();
     })
     CODEGEN(fcall, {
         auto name = trim(tree.subtrees[0]->parsed_region);
@@ -220,7 +220,7 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         auto cond = function_generate(factory, func, *tree.subtrees[1], table, now);
         func.branch_existing<bnez>(body, cond);
         func.switch_to(now);
-        func.new_section();
+        node = now;
     })
     CODEGEN(code_block, {
         table.enter();

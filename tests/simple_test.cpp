@@ -15,10 +15,12 @@ void test_function() {
             "i = 1;"
             "sum = 0;"
             "while (i < 100) {"
-            " sum = sum + i;"
+            " sum = sum + i + 1 * 213 / 1231323122 + 123213 % 1;"
             " i = i + 1;"
             " if (i > 5) {"
             "   return; "
+            " } else {"
+            "   do { sum = sum + 1; } while (sum & 1); "
             " }"
             "}"
             "print(sum);";
