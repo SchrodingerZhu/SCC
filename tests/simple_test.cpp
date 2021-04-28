@@ -10,22 +10,18 @@ void test_trim() {
 
 void test_function() {
     const static char data[] =
-            "int i;"
-            "int sum;"
+            "int i; int n;"
+            "int sum[2];"
             "i = 1;"
-            "sum = 0;"
-            "while (i < 100) {"
-            " sum = sum + i + 1 * 213 / 1231323122 + 123213 % 1;"
+            "sum[1] = 0;"
+            "n = read();"
+            "while (i <= n) {"
+            " sum[1] = sum[1] + i;"
             " i = i + 1;"
-            " if (i > 5) {"
-            "   return; "
-            " } else {"
-            "   do { sum = sum + 1; } while (sum & 1); "
-            " }"
+            " if (i == 3 || i == 5) { write( i ); } "
             "}"
-            "print(sum);";
+            "write(sum[1]);";
    auto i = scc::match_rule<scc::program>(data);
-   i->display(std::cout);
    codegen::codegen(*i);
 }
 int main() {

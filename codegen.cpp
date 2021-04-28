@@ -272,7 +272,7 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         if (table.defined_same_scope(name)) {
             throw SemanticError{std::string{"variable already defined: "} + name};
         }
-        table.define(std::move(name), func.new_memory(size));
+        table.define(std::move(name), func.new_memory(size * 4));
     })
     CODEGEN(var_decl, {
         auto name = trim(tree.subtrees[0]->parsed_region);
@@ -341,13 +341,16 @@ void codegen::codegen(const ParseTree &root) {
             .module = &module,
             .cache = {}
     };
+    configure_builtin(module, factory);
     auto func = module.create_function("main", 3);
+    func->append_void<text>(".set noat");
     func->assign_special(SpecialReg::v0, 0);
     table.enter();
     auto bottom = func->cursor;
     for (const auto &statement : root.subtrees) {
         function_generate(factory, *func, *statement, table, bottom);
     }
+    func->append_void<text>(".set at");
     table.escape();
     module.finalize();
     module.output(std::cout);
