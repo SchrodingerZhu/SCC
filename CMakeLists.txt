@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.3)
 project(simplified_c)
 
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_FLAGS "-O3 -g -flto")
 cmake_policy(PUSH)
 cmake_policy(SET CMP0076 OLD)
 add_subdirectory(frontend)
