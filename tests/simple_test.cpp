@@ -22,7 +22,8 @@ void test_function() {
             "}"
             "write(sum[1]);";
    auto i = scc::match_rule<scc::program>(data);
-   codegen::codegen(*i);
+   auto a = codegen::codegen(*i);
+   a.output(std::cout);
 }
 int main() {
     try {

@@ -48,7 +48,7 @@ namespace codegen {
 
     };
 
-    void codegen(const parser::ParseTree &root);
+    vmips::Module codegen(const parser::ParseTree &root);
 
     static inline void add_read(vmips::Module &module, EFuncFactory& factory) {
         using namespace vmips;

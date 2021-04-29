@@ -172,6 +172,7 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         return func.append<li>(constant(tree));
     })
     CODEGEN(return_statement, {
+        func.assign_special(SpecialReg::v0, 0);
         func.add_ret();
     })
     CODEGEN(unary_pos, {
@@ -333,7 +334,7 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
     return nullptr;
 }
 
-void codegen::codegen(const ParseTree &root) {
+vmips::Module codegen::codegen(const ParseTree &root) {
     assert(root.instance == typeid(scc::program));
     auto table = SccSymTable{};
     auto module = vmips::Module{"program"};
@@ -344,16 +345,16 @@ void codegen::codegen(const ParseTree &root) {
     configure_builtin(module, factory);
     auto func = module.create_function("main", 3);
     func->append_void<text>(".set noat");
-    func->assign_special(SpecialReg::v0, 0);
     table.enter();
     auto bottom = func->cursor;
     for (const auto &statement : root.subtrees) {
         function_generate(factory, *func, *statement, table, bottom);
     }
     func->append_void<text>(".set at");
+    func->assign_special(SpecialReg::v0, 0);
     table.escape();
     module.finalize();
-    module.output(std::cout);
+    return module;
 }
 
 codegen::SemanticError::SemanticError(std::string message) : message(std::move(message)) {}
