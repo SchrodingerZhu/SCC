@@ -23,8 +23,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend" beforeDir="false" afterPath="$PROJECT_DIR$/backend" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/parallel-hashmap" beforeDir="false" afterPath="$PROJECT_DIR$/backend/parallel-hashmap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codegen.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/codegen.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/include/sym_table.h" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/include/sym_table.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +34,7 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/frontend" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="1yf1x3pl" />
@@ -62,11 +60,6 @@
     <property name="settings.editor.selected.configurable" value="CPPToolchains" />
   </component>
   <component name="RunManager" selected="CMake Application.scc">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="color_test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="simplified_c" TARGET_NAME="color_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="simplified_c" RUN_TARGET_NAME="color_test">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -159,7 +152,8 @@
       <workItem from="1619779479403" duration="599000" />
       <workItem from="1619885275110" duration="602000" />
       <workItem from="1619942934888" duration="1661000" />
-      <workItem from="1620031917940" duration="4439000" />
+      <workItem from="1620031917940" duration="7369000" />
+      <workItem from="1620049455091" duration="2027000" />
     </task>
     <servers />
   </component>

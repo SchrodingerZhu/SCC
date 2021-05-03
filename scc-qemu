@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+if ! (docker images | grep csc4180-118010469-4 > /dev/null)
+then
+  echo "building docker image"
+  docker build . -t csc4180-118010469-4
+fi
+
+case $# in
+  1)
+    docker run --rm -i -v $1:/input csc4180-118010469-4 /project/scc -e /input
+    ;;
+  0)
+    docker run --rm -i csc4180-118010469-4 /project/scc -e
+    ;;
+  *)
+    echo "error"
+esac
