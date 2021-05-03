@@ -304,7 +304,10 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         if (target) {
             try {
                 auto data = std::get<VMemPtr>(*target);
-                return func.append<array_load>(offset, data);
+                func.append_void<text>(".set noat");
+                auto res = func.append<array_load>(offset, data);
+                func.append_void<text>(".set at");
+                return res;
             } catch (const std::bad_variant_access &) {
                 throw SemanticError{std::string{"variable cannot be indexed: "} + name};
             }
@@ -321,7 +324,9 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         if (target) {
             try {
                 auto data = std::get<VMemPtr>(*target);
+                func.append_void<text>(".set noat");
                 func.append_void<array_store>(value, offset, data);
+                func.append_void<text>(".set at");
             } catch (const std::bad_variant_access &) {
                 throw SemanticError{std::string{"variable cannot be indexed: "} + name};
             }
@@ -344,13 +349,11 @@ vmips::Module codegen::codegen(const ParseTree &root) {
     };
     configure_builtin(module, factory);
     auto func = module.create_function("main", 3);
-    func->append_void<text>(".set noat");
     table.enter();
     auto bottom = func->cursor;
     for (const auto &statement : root.subtrees) {
         function_generate(factory, *func, *statement, table, bottom);
     }
-    func->append_void<text>(".set at");
     func->assign_special(SpecialReg::v0, 0);
     table.escape();
     module.finalize();
