@@ -287,10 +287,10 @@ codegen::function_generate(EFuncFactory &factory, vmips::Function &func, const p
         auto target = table(name);
         auto value = function_generate(factory, func, *tree.subtrees[1], table, node);
         if (target && target->index() == 0) {
-            table.update(name, value);
+            table.update(name, false, value);
             func.add_phi(std::get<VRegPtr>(*target), value); // merge liveness
         } else if (target->index() == 2) {
-            table.update(name, value);
+            table.update(name, true, value);
         } else if (target) {
             throw SemanticError{std::string{"target variable is not assignable: "} + name};
         } else {

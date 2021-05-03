@@ -148,19 +148,22 @@ int main(int argc, const char** argv) {
                                           0
                                   });
     if (ast) {
-        ast = ast->compress<scc::SelectRule>()[0];
-        auto module = codegen::codegen(*ast);
-        module.output(*opt.asm_out);
-        opt.asm_out->flush();
-        opt.asm_out->close();
         try {
+            ast = ast->compress<scc::SelectRule>()[0];
+            auto module = codegen::codegen(*ast);
+            module.output(*opt.asm_out);
+            opt.asm_out->flush();
+            opt.asm_out->close();
             auto ret = opt.asm_opt.compile(opt.asm_path, opt.exec_path);
             if (ret) throw std::runtime_error("non-zero return code from assembler");
             if (opt.exec_opt) {
                 ret = opt.exec_opt->execute(opt.exec_path);
                 if (ret) throw std::runtime_error("non-zero return code from emulator");
             }
-        } catch (const std::exception &e) {
+        }catch (const codegen::SemanticError &e) {
+            std::cerr << e.what() << std::endl;
+        }
+        catch (const std::exception &e) {
             std::cerr << e.what() << std::endl;
         }
     } else {
