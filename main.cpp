@@ -19,7 +19,8 @@ static const char HELP[] =
         "  -O,--asm-output <path>      asm output path [default: a.S]\n"
         "  -a,--assembler <path>       assembler path [default: mipsel-linux-musl-cc]\n"
         "  -e,--execute                execute after compile\n"
-        "  -X,--emulator <path>        set emulator path [qemu-mipsel]"
+        "  -X,--emulator <path>        set emulator path [default: qemu-mipsel]\n"
+        "  -h,--help                   print this help message and exit"
         "";
 
 
@@ -97,6 +98,10 @@ struct Opt {
                         } else {
                             exit_with_error("emulator path is already provided");
                         }
+                    })
+                    OPTION(h, help, {
+                        std::cout << HELP << std::endl;
+                        exit(0);
                     })
                     break;
                 case OptParseState::WAIT_FOR_OUTPUT:
