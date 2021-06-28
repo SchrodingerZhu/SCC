@@ -1,0 +1,4 @@
+# SCC
+
+Simplified C Compiler
+
